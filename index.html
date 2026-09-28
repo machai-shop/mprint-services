@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>MPrint Services</title>
+  <link rel="icon" href="logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy: #1a2332;
+      --ink: #243044;
+      --muted: #6b7c90;
+      --line: #e3ebf4;
+      --blue: #0094ea;
+      --blue-deep: #0068c9;
+      --bg: #f2f6fb;
+      --card: #ffffff;
+      --danger: #b42318;
+    }
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: Outfit, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+    }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 22px;
+      background: #fff;
+      border-bottom: 1px solid var(--line);
+    }
+    .brand img { height: 84px; width: auto; display: block; }
+    .today {
+      text-align: right;
+    }
+    .today span { display: block; color: var(--muted); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; }
+    .today strong { font-size: 26px; color: var(--navy); letter-spacing: -0.03em; }
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 18px 18px 48px; }
+    nav {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    nav button {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      border-radius: 999px;
+      padding: 8px 16px;
+      font-weight: 600;
+    }
+    nav button.on {
+      background: var(--navy);
+      color: #fff;
+      border-color: var(--navy);
+    }
+    .layout {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 16px;
+      align-items: start;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 16px;
+    }
+    .step {
+      margin: 0 0 6px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .group { margin-bottom: 14px; }
+    .choices {
+      display: grid;
+      gap: 8px;
+    }
+    .choices.cols-4 { grid-template-columns: repeat(4, 1fr); }
+    .choices.cols-3 { grid-template-columns: repeat(3, 1fr); }
+    .choices.cols-2 { grid-template-columns: repeat(2, 1fr); }
+    .choice {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--navy);
+      border-radius: 12px;
+      min-height: 52px;
+      padding: 8px 10px;
+      font-weight: 600;
+      text-align: left;
+    }
+    .choice small {
+      display: block;
+      margin-top: 2px;
+      font-weight: 600;
+      color: var(--blue-deep);
+    }
+    .choice.on {
+      background: linear-gradient(180deg, #00a6f5 0%, #006ed6 100%);
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 8px 18px rgba(0, 110, 214, 0.22);
+    }
+    .choice.svc-xerox { background: #e8f6ff; border-color: #8ecfff; color: #0b5ea8; }
+    .choice.svc-printing { background: #e6faf8; border-color: #7ed8d0; color: #0e7490; }
+    .choice.svc-scan { background: #fde68a; border-color: #eab308; color: #854d0e; }
+    .choice.svc-lamination { background: #f3eefe; border-color: #c9b6f5; color: #5b21b6; }
+    .choice.svc, .choice.wallet {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .choice.svc.on, .choice.wallet.on {
+      border: 3px solid var(--navy);
+      box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--navy);
+    }
+    .choice.svc.on::after, .choice.wallet.on::after {
+      content: "✓";
+      font-size: 18px;
+      line-height: 1;
+    }
+    .choice.svc-xerox.on { background: linear-gradient(180deg, #00a6f5 0%, #006ed6 100%); color: #fff; }
+    .choice.svc-printing.on { background: linear-gradient(180deg, #0891b2 0%, #155e75 100%); color: #fff; }
+    .choice.svc-scan.on { background: linear-gradient(180deg, #ca8a04 0%, #713f12 100%); color: #fff; }
+    .choice.svc-lamination.on { background: linear-gradient(180deg, #a78bfa 0%, #6d28d9 100%); color: #fff; }
+    .choice.svc-cashin { background: #fbcfe8; border-color: #f472b6; color: #9d174d; }
+    .choice.svc-cashout { background: #fecaca; border-color: #f87171; color: #991b1b; }
+    .choice.svc-load { background: #bbf7d0; border-color: #4ade80; color: #166534; }
+    .choice.svc-bills { background: #e7d5b5; border-color: #c4a574; color: #78350f; }
+    .choice.svc-transfer { background: #ffedd5; border-color: #fdba74; color: #c2410c; }
+    .choice.svc-cashin.on { background: linear-gradient(180deg, #db2777 0%, #9d174d 100%); color: #fff; }
+    .choice.svc-cashout.on { background: linear-gradient(180deg, #dc2626 0%, #991b1b 100%); color: #fff; }
+    .choice.svc-load.on { background: linear-gradient(180deg, #16a34a 0%, #14532d 100%); color: #fff; }
+    .choice.svc-bills.on { background: linear-gradient(180deg, #a16207 0%, #5c3317 100%); color: #fff; }
+    .choice.svc-transfer.on { background: linear-gradient(180deg, #fb923c 0%, #c2410c 100%); color: #fff; }
+    .choice.wallet {
+      position: relative;
+      justify-content: center;
+      padding: 0;
+      overflow: hidden;
+      background: #fff;
+    }
+    .choice.wallet-gcash, .choice.wallet-gcash.on { background: #0078f0; }
+    .choice.wallet-maya, .choice.wallet-maya.on { background: #00a84a; }
+    .choice.wallet-gotyme, .choice.wallet-gotyme.on { background: #00c8e0; }
+    .choice.wallet-mari, .choice.wallet-mari.on { background: #ff5c00; }
+    .choice.wallet img {
+      display: block;
+      width: 100%;
+      height: 54px;
+      object-fit: contain;
+      pointer-events: none;
+    }
+    .choice.wallet.on::after {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #fff;
+      color: var(--navy);
+      font-size: 13px;
+      display: grid;
+      place-items: center;
+    }
+    .payfields { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .payfields.one { grid-template-columns: 1fr; }
+    .payfields input {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 10px 12px;
+      background: #fff;
+      color: var(--navy);
+      font-weight: 700;
+    }
+    .choice.ink-bw { background: #f3f4f6; border-color: #c5cad3; color: #3a4250; }
+    .choice.ink-partial { background: linear-gradient(90deg, #f3f4f6 0 48%, #e8f4ff 52% 100%); border-color: #b7c3d4; color: #243044; }
+    .choice.ink-full { background: linear-gradient(90deg, #ffe4e6, #fef3c7, #d1fae5, #dbeafe); border-color: #d7c4b0; color: #243044; }
+    .choice.ink-bw small { color: #3a4250; }
+    .choice.ink-partial small { color: #0b5ea8; }
+    .choice.ink-full small { color: #9a3412; }
+    .choice.ink-bw.on { background: #4b5563; color: #fff; border-color: transparent; box-shadow: 0 8px 18px rgba(75, 85, 99, 0.2); }
+    .choice.ink-partial.on { background: linear-gradient(90deg, #4b5563 0 48%, #0094ea 52% 100%); color: #fff; border-color: transparent; box-shadow: 0 8px 18px rgba(0, 110, 214, 0.18); }
+    .choice.ink-full.on { background: linear-gradient(90deg, #e11d48, #f59e0b, #10b981, #0094ea); color: #fff; border-color: transparent; box-shadow: 0 8px 18px rgba(225, 29, 72, 0.18); }
+    .choice.on small { color: #fff; }
+    .line b.svc-xerox, .sale b.svc-xerox { color: #006ed6; }
+    .line b.svc-printing, .sale b.svc-printing { color: #0e7490; }
+    .line b.svc-scan, .sale b.svc-scan { color: #854d0e; }
+    .line b.svc-lamination, .sale b.svc-lamination { color: #6d28d9; }
+    .line b.svc-cashin, .sale b.svc-cashin { color: #9d174d; }
+    .line b.svc-cashout, .sale b.svc-cashout { color: #991b1b; }
+    .line b.svc-load, .sale b.svc-load { color: #166534; }
+    .line b.svc-bills, .sale b.svc-bills { color: #78350f; }
+    .line b.svc-transfer, .sale b.svc-transfer { color: #c2410c; }
+    .addbar {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 10px;
+      align-items: center;
+      margin-top: 4px;
+    }
+    .qtybox {
+      display: flex;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      overflow: hidden;
+      background: #fff;
+    }
+    .qtybox button, .lineqtybox button {
+      width: 36px;
+      height: 40px;
+      border: 0;
+      background: #f6f9fc;
+      color: var(--navy);
+      font-size: 18px;
+    }
+    .qtybox input, .lineqty {
+      width: 52px;
+      height: 40px;
+      border: 0;
+      text-align: center;
+      font-weight: 700;
+      color: var(--navy);
+    }
+    #preview { min-height: 42px; }
+    #preview strong { display: block; color: var(--navy); }
+    #preview span { color: var(--muted); font-size: 14px; }
+    #addBtn, #saveBtn, .sheetbtn {
+      border: 0;
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-weight: 700;
+      background: linear-gradient(180deg, #00a6f5 0%, #006ed6 100%);
+      color: #fff;
+    }
+    #addBtn { grid-column: 1 / -1; }
+    #addBtn:disabled, #saveBtn:disabled, .sheetbtn:disabled {
+      background: #d5deea;
+      color: #7d8da1;
+      cursor: default;
+      box-shadow: none;
+    }
+    .ticket h2, .records h2, .group h2 {
+      margin: 0 0 12px;
+      font-size: 18px;
+      color: var(--navy);
+    }
+    label.field { display: block; margin-bottom: 10px; }
+    label.field span {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    .headside { display: flex; align-items: center; gap: 16px; }
+    #logoutBtn {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-weight: 600;
+    }
+    .login { max-width: 380px; margin: 36px auto 0; }
+    .login h2 { margin: 0 0 14px; font-size: 22px; color: var(--navy); }
+    #loginBtn {
+      width: 100%;
+      border: 0;
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-weight: 700;
+      background: var(--navy);
+      color: #fff;
+    }
+    .loginerr { color: var(--danger); font-weight: 600; margin: 0 0 12px; }
+    input[type="text"], input[type="password"] {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 10px 12px;
+      background: #fff;
+      color: var(--navy);
+    }
+    input:focus { outline: 2px solid rgba(0, 148, 234, 0.35); border-color: var(--blue); }
+    .empty {
+      color: var(--muted);
+      background: #f7fafc;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+    .line {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto auto auto;
+      gap: 8px;
+      align-items: center;
+      padding: 10px 0;
+      border-top: 1px solid var(--line);
+    }
+    .line .qtybox input { width: 36px; }
+    .line b { display: block; color: var(--navy); }
+    .line em { font-style: normal; color: var(--muted); font-size: 13px; }
+    .line .amt { font-weight: 700; color: var(--navy); min-width: 72px; text-align: right; }
+    .iconx {
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      font-size: 18px;
+      width: 28px;
+    }
+    .totalrow {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin: 8px 0 12px;
+      padding-top: 8px;
+      border-top: 1px solid var(--line);
+    }
+    .totalrow strong { font-size: 28px; letter-spacing: -0.03em; color: var(--navy); }
+    #saveBtn { width: 100%; background: var(--navy); }
+    .filters { display: flex; gap: 8px; margin-bottom: 12px; }
+    .filters button, .textbtn {
+      border: 0;
+      background: transparent;
+      color: var(--blue-deep);
+      font-weight: 600;
+      padding: 0;
+    }
+    .filters button {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      border-radius: 999px;
+      padding: 6px 12px;
+    }
+    .filters button.on { background: var(--navy); color: #fff; border-color: var(--navy); }
+    .sale {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px 14px;
+      margin-bottom: 10px;
+      background: #fff;
+    }
+    .sale head, .sale .top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .sale .top b { color: var(--navy); }
+    .sale .meta { color: var(--muted); font-size: 13px; }
+    .sale ul { list-style: none; margin: 8px 0 0; padding: 0; }
+    .sale li {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 14px;
+      padding: 3px 0;
+    }
+    .remove {
+      border: 0;
+      background: transparent;
+      color: var(--danger);
+      font-weight: 600;
+      font-size: 13px;
+    }
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .sheetbtn { white-space: nowrap; }
+    #toast {
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%) translateY(12px);
+      background: var(--navy);
+      color: #fff;
+      border-radius: 999px;
+      padding: 12px 16px;
+      opacity: 0;
+      pointer-events: none;
+      transition: 0.2s ease;
+      max-width: min(560px, calc(100% - 24px));
+      z-index: 5;
+    }
+    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: auto; }
+    #toast button {
+      margin-left: 10px;
+      border: 0;
+      background: transparent;
+      color: #9ad4ff;
+      font-weight: 700;
+    }
+    @media (max-width: 860px) {
+      .layout { grid-template-columns: 1fr; }
+      .choices.cols-4 { grid-template-columns: 1fr 1fr; }
+      header { padding: 12px; }
+      .brand img { height: 64px; }
+      .today strong { font-size: 20px; }
+      .toolbar { flex-direction: column; align-items: stretch; }
+      .sheetbtn { width: 100%; }
+      .sale .top, .sale li { flex-wrap: wrap; }
+    }
+    @media (max-width: 640px) {
+      header { padding: 8px 12px; gap: 8px; }
+      .brand img { height: 52px; }
+      .headside { gap: 8px; }
+      .today span { font-size: 10px; letter-spacing: 0.04em; }
+      .today strong { font-size: 18px; }
+      #logoutBtn { padding: 8px 12px; }
+      .wrap { padding: 12px 12px 28px; }
+      .login { max-width: none; margin-top: 12px; }
+      nav button { flex: 1; text-align: center; padding: 10px 12px; }
+      .card { padding: 12px; }
+      .who { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+      .who .field { margin-bottom: 8px; }
+      .group { margin-bottom: 10px; }
+      .choices { gap: 6px; }
+      .choice { font-size: 15px; min-height: 44px; padding: 6px 8px; }
+      .choice.wallet img { height: 48px; }
+      .qtybox button, .lineqtybox button, .iconx { width: 44px; height: 44px; }
+      .qtybox input, .lineqty { height: 44px; font-size: 16px; }
+      input[type="text"], input[type="password"], .payfields input { font-size: 16px; }
+      .line {
+        grid-template-columns: minmax(0, 1fr) auto;
+        grid-template-areas: "info del" "qty amt";
+      }
+      .line > div:first-child { grid-area: info; }
+      .line .lineqtybox { grid-area: qty; justify-self: start; }
+      .line .amt { grid-area: amt; align-self: center; }
+      .line .iconx { grid-area: del; }
+      #viewSale { padding-bottom: 118px; }
+      .dock {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 6;
+        background: #fff;
+        border-top: 1px solid var(--line);
+        padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+        box-shadow: 0 -8px 24px rgba(26, 35, 50, 0.08);
+      }
+      .dock .totalrow { margin: 0 0 8px; padding: 0; border: 0; }
+      .dock .totalrow strong { font-size: 22px; }
+      #toast { bottom: calc(118px + env(safe-area-inset-bottom)); max-width: calc(100% - 24px); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand"><img src="logo.png?v=2" alt="MPrint Services"></div>
+    <div class="headside" id="headSide" hidden>
+      <div class="today">
+        <span>Today</span>
+        <strong id="todayTotal">₱0.00</strong>
+        <span id="todayCount">0 sales</span>
+      </div>
+      <button type="button" id="logoutBtn">Log out</button>
+    </div>
+  </header>
+  <div class="wrap">
+    <section id="viewLogin" class="login">
+      <div class="card">
+        <h2>Sign in</h2>
+        <form id="loginForm">
+          <label class="field"><span>Password</span><input id="loginPassword" type="password" autocomplete="current-password" autofocus></label>
+          <p id="loginError" class="loginerr" hidden>Wrong password.</p>
+          <button type="submit" id="loginBtn">Sign in</button>
+        </form>
+      </div>
+    </section>
+    <div id="app" hidden>
+    <nav>
+      <button type="button" id="tabSale" class="on">New sale</button>
+      <button type="button" id="tabRecords">Records</button>
+    </nav>
+
+    <section id="viewSale" class="layout">
+      <div class="card">
+        <div id="choices"></div>
+        <div class="addbar">
+          <div class="qtybox">
+            <button type="button" id="qtyMinus" aria-label="Decrease quantity">−</button>
+            <input id="qty" type="number" min="1" max="9999" value="1" aria-label="Quantity">
+            <button type="button" id="qtyPlus" aria-label="Increase quantity">+</button>
+          </div>
+          <div id="preview"><span>Choose a service</span></div>
+          <button type="button" id="addBtn" disabled>Add to sale</button>
+        </div>
+      </div>
+      <div class="card ticket">
+        <h2>This sale</h2>
+        <div class="who">
+          <label class="field"><span>Customer</span><input id="customer" type="text" placeholder="Optional" autocomplete="off"></label>
+          <label class="field"><span>Note</span><input id="note" type="text" placeholder="Optional" autocomplete="off"></label>
+        </div>
+        <div id="lines"><div class="empty">No services yet.</div></div>
+        <div class="dock">
+          <div class="totalrow"><span>Total</span><strong id="saleTotal">₱0.00</strong></div>
+          <button type="button" id="saveBtn" disabled>Save sale</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="viewRecords" class="records" hidden>
+      <div class="toolbar">
+        <div class="filters">
+          <button type="button" id="filterToday" class="on">Today</button>
+          <button type="button" id="filterAll">All</button>
+        </div>
+        <button type="button" class="sheetbtn" id="copyBtn">Open sheet</button>
+      </div>
+      <div id="recordList"></div>
+    </section>
+    </div>
+  </div>
+  <div id="toast" role="status"></div>
+
+  <script>
+    const COLORS = ["B&W", "Partial Color", "Fully Colored"];
+    const SHORT = {
+      "Text Only": [5, 8, 12],
+      "Text with Picture": [6, 10, 15],
+      "Picture Only": [7, 12, 20]
+    };
+    const LONG = {
+      "Text Only": [6, 9, 13],
+      "Text with Picture": [7, 11, 16],
+      "Picture Only": [8, 13, 25]
+    };
+    const SCAN = { "Scan Document": 5, "Scan with Multiple Pages": 5 };
+    const WALLETS = ["GCash", "Maya", "GoTyme", "MariBank"];
+    const WALLET_CLASS = { GCash: "wallet wallet-gcash", Maya: "wallet wallet-maya", GoTyme: "wallet wallet-gotyme", MariBank: "wallet wallet-mari" };
+    const WALLET_LOGO = { GCash: "logo-gcash.png", Maya: "logo-maya.png", GoTyme: "logo-gotyme.png", MariBank: "logo-mari.png" };
+    const BILLS = ["Internet", "Water", "Electric"];
+    const FEE_BANDS = [
+      [500, 10], [750, 15], [1000, 20], [1500, 30], [2000, 40], [2500, 50], [3000, 60],
+      [3500, 70], [4000, 80], [4500, 90], [5000, 100], [5500, 110], [6000, 120], [6500, 130],
+      [7000, 140], [7500, 150], [8000, 160], [8500, 170], [9000, 180], [9500, 190], [10000, 200],
+      [10500, 210], [11000, 220], [11500, 230], [12000, 240], [12500, 250], [13000, 260],
+      [13500, 270], [14000, 280], [14500, 290], [15000, 300], [15500, 310], [16000, 320]
+    ];
+
+    function paper(table) {
+      const out = {};
+      Object.keys(table).forEach((type) => {
+        out[type] = {};
+        COLORS.forEach((color, i) => { out[type][color] = table[type][i]; });
+      });
+      return out;
+    }
+
+    const CATALOG = {
+      xerox: { label: "Xerox / Copy", mode: "print", sizes: { Short: paper(SHORT), Long: paper(LONG), A4: paper(SHORT) } },
+      printing: { label: "Printing", mode: "print", sizes: { Short: paper(SHORT), Long: paper(LONG), A4: paper(SHORT) } },
+      scan: { label: "Scan", mode: "scan", sizes: { Short: SCAN, Long: SCAN, A4: SCAN } },
+      lamination: {
+        label: "Lamination",
+        mode: "flat",
+        items: {
+          "ID / Card Size": 10,
+          "2×3 / Small": 15,
+          "A4": 30,
+          "Short Coupon": 30,
+          "Long Coupon": 35,
+          "A3": 50
+        }
+      },
+      cashin: { label: "Cash In", mode: "cash", fee: true },
+      cashout: { label: "Cash Out", mode: "cash", fee: true },
+      load: { label: "Buy Load", mode: "cash", fee: false },
+      bills: { label: "Pay Bills", mode: "bills", fee: false },
+      transfer: { label: "Bank Transfer", mode: "cash", fee: false }
+    };
+
+    const HEADERS = ["Date", "Time", "Receipt", "Customer", "Category", "Service", "Qty", "Unit Price", "Amount", "Note"];
+    const SHEET_URL = "https://docs.google.com/spreadsheets/d/1l9F3zFA8RUkAEqMfd8m1ufhGhkn8zRCT5Y85wGHDYDI/edit?gid=290841672#gid=290841672";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyWtZLE8DsQqPj1pAgsdQL2XOrLUzxGUMqC5d66iIREBQcjook0Xgx_XRI7zNQXN08vnw/exec";
+    const LOGIN_PASSWORD = "mprint";
+    const AUTH_KEY = "mprint.auth";
+    const SALES_KEY = "mprint.sales";
+    const HEADER_KEY = "mprint.headerCopied";
+
+    const choicesEl = document.getElementById("choices");
+    const previewEl = document.getElementById("preview");
+    const linesEl = document.getElementById("lines");
+    const qtyEl = document.getElementById("qty");
+    const addBtn = document.getElementById("addBtn");
+    const saveBtn = document.getElementById("saveBtn");
+    const saleTotalEl = document.getElementById("saleTotal");
+    const customerEl = document.getElementById("customer");
+    const noteEl = document.getElementById("note");
+    const todayTotalEl = document.getElementById("todayTotal");
+    const todayCountEl = document.getElementById("todayCount");
+    const recordList = document.getElementById("recordList");
+    const copyBtn = document.getElementById("copyBtn");
+    const toastEl = document.getElementById("toast");
+    let state = { category: "xerox", size: null, type: null, color: null, bill: null, amount: "", fee: "" };
+    let cart = [];
+    let sales = loadSales();
+    let filter = "today";
+    let toastTimer = 0;
+
+    function loadSales() {
+      try { return JSON.parse(localStorage.getItem(SALES_KEY)) || []; }
+      catch (e) { return []; }
+    }
+    function saveSales() {
+      localStorage.setItem(SALES_KEY, JSON.stringify(sales));
+    }
+    function peso(n) {
+      return "₱" + Number(n).toLocaleString("en-PH", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+    function round(n) { return Math.round(Number(n) * 100) / 100; }
+    function esc(s) {
+      return String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    }
+    function manilaParts(d) {
+      const parts = Object.fromEntries(new Intl.DateTimeFormat("en-CA", {
+        timeZone: "Asia/Manila",
+        year: "numeric", month: "2-digit", day: "2-digit",
+        hour: "2-digit", minute: "2-digit", hourCycle: "h23"
+      }).formatToParts(d || new Date()).map((p) => [p.type, p.value]));
+      return { date: parts.year + "-" + parts.month + "-" + parts.day, time: parts.hour + ":" + parts.minute };
+    }
+    function prettyTime(time) {
+      const [h, m] = time.split(":").map(Number);
+      const hr = h % 12 || 12;
+      return hr + ":" + String(m).padStart(2, "0") + (h < 12 ? " AM" : " PM");
+    }
+    function prettyDate(iso) {
+      const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      const [y, m, d] = iso.split("-").map(Number);
+      return months[m - 1] + " " + d;
+    }
+    function cell(v) { return String(v == null ? "" : v).replace(/[\t\r\n]/g, " "); }
+
+    function moneyNumber(value) {
+      const raw = String(value == null ? "" : value).replace(/,/g, "").trim();
+      if (!raw) return NaN;
+      const n = Number(raw);
+      return Number.isFinite(n) ? n : NaN;
+    }
+    function cashFee(amount) {
+      if (!(amount >= 1) || amount > 16000) return null;
+      for (let i = 0; i < FEE_BANDS.length; i++) {
+        if (amount <= FEE_BANDS[i][0]) return FEE_BANDS[i][1];
+      }
+      return null;
+    }
+    function isPay(cat) {
+      return cat && (cat.mode === "cash" || cat.mode === "bills");
+    }
+    function needsTypedFee(cat) {
+      if (!isPay(cat)) return false;
+      if (!cat.fee) return true;
+      return moneyNumber(state.amount) > 16000;
+    }
+    function currentUnit() {
+      const cat = CATALOG[state.category];
+      if (!cat) return null;
+      if (isPay(cat)) {
+        if (!state.type) return null;
+        if (cat.mode === "bills" && !state.bill) return null;
+        const amount = moneyNumber(state.amount);
+        if (!(amount > 0)) return null;
+        if (cat.fee && amount <= 16000) return cashFee(amount);
+        const typed = moneyNumber(state.fee);
+        return typed >= 0 ? typed : null;
+      }
+      if (cat.mode === "flat") return state.type ? cat.items[state.type] : null;
+      if (!state.size || !state.type) return null;
+      const row = cat.sizes[state.size][state.type];
+      if (cat.mode === "scan") return row;
+      if (!state.color) return null;
+      return row[state.color];
+    }
+    function currentDetail() {
+      const cat = CATALOG[state.category];
+      if (isPay(cat)) {
+        const amount = moneyNumber(state.amount);
+        return [state.type, cat.mode === "bills" ? state.bill : "", amount > 0 ? peso(amount) : ""].filter(Boolean).join(" · ");
+      }
+      if (cat.mode === "flat") return state.type || "";
+      if (cat.mode === "scan") return [state.size, state.type].filter(Boolean).join(" · ");
+      return [state.size, state.type, state.color].filter(Boolean).join(" · ");
+    }
+    function qty() {
+      let q = parseInt(qtyEl.value, 10);
+      if (!q || q < 1) q = 1;
+      if (q > 9999) q = 9999;
+      return q;
+    }
+
+    const INK_CLASS = { "B&W": "ink-bw", "Partial Color": "ink-partial", "Fully Colored": "ink-full" };
+
+    function serviceClass(label) {
+      const id = Object.keys(CATALOG).find((key) => CATALOG[key].label === label);
+      return id ? "svc-" + id : "";
+    }
+
+    function choice(group, name, selected, price, extra, image) {
+      const on = selected === name ? " on" : "";
+      const extraClass = extra ? " " + extra : "";
+      const priceHtml = price == null ? "" : "<small>" + peso(price) + "</small>";
+      const label = image ? ' aria-label="' + esc(name) + '"' : "";
+      const body = image ? '<img src="' + image + '" alt="">' : esc(name);
+      return '<button type="button" class="choice' + extraClass + on + '"' + label + ' data-group="' + group + '" data-value="' + esc(name) + '">' + body + priceHtml + "</button>";
+    }
+
+    function renderChoices() {
+      const cat = CATALOG[state.category];
+      let html = '<div class="group"><p class="step">Service</p><div class="choices cols-4">';
+      Object.keys(CATALOG).forEach((id) => {
+        html += choice("category", id, state.category, null, "svc svc-" + id).replace(">" + esc(id), ">" + esc(CATALOG[id].label));
+      });
+      html += "</div></div>";
+
+      if (isPay(cat)) {
+        html += '<div class="group"><p class="step">Type</p><div class="choices cols-4">';
+        WALLETS.forEach((name) => { html += choice("type", name, state.type, null, WALLET_CLASS[name], WALLET_LOGO[name]); });
+        html += "</div></div>";
+        if (cat.mode === "bills") {
+          html += '<div class="group"><p class="step">Bill</p><div class="choices cols-3">';
+          BILLS.forEach((name) => { html += choice("bill", name, state.bill, null); });
+          html += "</div></div>";
+        }
+        const typed = needsTypedFee(cat);
+        html += '<div class="group"><div class="payfields' + (typed ? "" : " one") + '">';
+        html += '<label class="field"><span>Amount</span><input id="payAmount" class="money" inputmode="decimal" placeholder="0" value="' + esc(state.amount) + '"></label>';
+        if (typed) html += '<label class="field"><span>Fee</span><input id="payFee" class="money" inputmode="decimal" placeholder="0" value="' + esc(state.fee) + '"></label>';
+        html += "</div></div>";
+      } else if (cat.mode === "flat") {
+        html += '<div class="group"><p class="step">Size</p><div class="choices cols-2">';
+        Object.keys(cat.items).forEach((name) => { html += choice("lam", name, state.type, cat.items[name]); });
+        html += "</div></div>";
+      } else {
+        html += '<div class="group"><p class="step">Paper</p><div class="choices cols-3">';
+        Object.keys(cat.sizes).forEach((name) => { html += choice("size", name, state.size, null); });
+        html += "</div></div>";
+        if (state.size) {
+          const table = cat.sizes[state.size];
+          html += '<div class="group"><p class="step">' + (cat.mode === "scan" ? "Scan" : "Type") + '</p><div class="choices cols-' + (cat.mode === "scan" ? "2" : "3") + '">';
+          Object.keys(table).forEach((name) => {
+            const price = cat.mode === "scan" ? table[name] : null;
+            html += choice("type", name, state.type, price);
+          });
+          html += "</div></div>";
+          if (cat.mode === "print" && state.type) {
+            html += '<div class="group"><p class="step">Color</p><div class="choices cols-3">';
+            COLORS.forEach((name) => { html += choice("color", name, state.color, table[state.type][name], INK_CLASS[name]); });
+            html += "</div></div>";
+          }
+        }
+      }
+      choicesEl.innerHTML = html;
+    }
+
+    function renderPreview() {
+      const cat = CATALOG[state.category];
+      const unit = currentUnit();
+      const q = qty();
+      if (unit == null) {
+        let hint = "Choose a service";
+        if (isPay(cat)) {
+          if (!state.type) hint = "Choose the type";
+          else if (cat.mode === "bills" && !state.bill) hint = "Choose the bill";
+          else if (!(moneyNumber(state.amount) > 0)) hint = "Enter the amount";
+          else hint = "The chart stops at ₱16,000. Type the fee.";
+        }
+        previewEl.innerHTML = "<span>" + hint + "</span>";
+        addBtn.disabled = true;
+        return;
+      }
+      if (isPay(cat)) {
+        previewEl.innerHTML = "<strong>Fee " + peso(unit) + "</strong><span>" + esc(currentDetail()) + (q > 1 ? " · " + peso(round(unit * q)) : "") + "</span>";
+      } else {
+        previewEl.innerHTML = "<strong>" + peso(unit) + " each</strong><span>" + esc(currentDetail()) + " · " + peso(round(unit * q)) + "</span>";
+      }
+      addBtn.disabled = false;
+    }
+
+    function renderTicket() {
+      if (!cart.length) {
+        linesEl.innerHTML = '<div class="empty">No services yet.</div>';
+      } else {
+        linesEl.innerHTML = cart.map((item, i) => (
+          '<div class="line" data-i="' + i + '">' +
+            "<div><b class=\"" + serviceClass(item.category) + "\">" + esc(item.category) + "</b><em>" + esc(item.detail) + "</em></div>" +
+            '<div class="lineqtybox qtybox">' +
+              '<button type="button" data-act="dec" aria-label="Decrease">−</button>' +
+              '<input class="lineqty" type="number" min="1" max="9999" value="' + item.qty + '" aria-label="Quantity">' +
+              '<button type="button" data-act="inc" aria-label="Increase">+</button>' +
+            "</div>" +
+            '<div class="amt">' + peso(item.amount) + '</div>' +
+            '<button type="button" class="iconx" data-act="del" aria-label="Remove">×</button>' +
+          "</div>"
+        )).join("");
+      }
+      const total = round(cart.reduce((sum, item) => sum + item.amount, 0));
+      saleTotalEl.textContent = peso(total);
+      saveBtn.disabled = cart.length === 0;
+      saveBtn.textContent = cart.length ? "Save sale · " + peso(total) : "Save sale";
+    }
+
+    function renderToday() {
+      const today = manilaParts().date;
+      const rows = sales.filter((s) => s.date === today);
+      const total = round(rows.reduce((sum, s) => sum + s.total, 0));
+      todayTotalEl.textContent = peso(total);
+      todayCountEl.textContent = rows.length + (rows.length === 1 ? " sale" : " sales");
+    }
+
+    function renderRecords() {
+      const today = manilaParts().date;
+      const rows = sales.filter((s) => filter === "all" || s.date === today);
+      if (!rows.length) {
+        recordList.innerHTML = '<div class="empty">' + (filter === "today" ? "No sales today yet." : "No sales yet.") + "</div>";
+      } else {
+        recordList.innerHTML = rows.map((sale) => (
+          '<article class="sale" data-id="' + esc(sale.receipt) + '">' +
+            '<div class="top"><div><b>' + esc(sale.receipt) + "</b><div class=\"meta\">" +
+              esc(prettyDate(sale.date) + " · " + prettyTime(sale.time) + " · " + (sale.customer || "Walk-in")) +
+              (sale.note ? " · " + esc(sale.note) : "") +
+              (sale.onSheet ? "" : " · not on the sheet yet") +
+            "</div></div><div><b>" + peso(sale.total) + '</b><div><button type="button" class="remove" data-receipt="' + esc(sale.receipt) + '">Remove</button></div></div></div>' +
+            "<ul>" + sale.items.map((item) => (
+              "<li><span><b class=\"" + serviceClass(item.category) + "\">" + esc(item.category) + "</b> · " + esc(item.detail) + "</span><span>" + item.qty + " × " + peso(item.unit) + "</span></li>"
+            )).join("") + "</ul></article>"
+        )).join("");
+      }
+      const pending = sales.filter((s) => !s.onSheet).length;
+      copyBtn.disabled = false;
+      copyBtn.textContent = pending ? "Copy " + pending + (pending === 1 ? " sale" : " sales") + " and open sheet" : "Open sheet";
+    }
+
+    function showToast(message, undo) {
+      clearTimeout(toastTimer);
+      toastEl.innerHTML = esc(message) + (undo ? '<button type="button" id="toastUndo">Undo</button>' : "");
+      toastEl.classList.add("show");
+      if (undo) document.getElementById("toastUndo").onclick = undo;
+      toastTimer = setTimeout(() => toastEl.classList.remove("show"), 8000);
+    }
+
+    function addItem() {
+      const unit = currentUnit();
+      if (unit == null) return;
+      const q = qty();
+      const detail = currentDetail();
+      const category = CATALOG[state.category].label;
+      const key = category + "|" + detail;
+      const found = cart.find((item) => item.key === key);
+      if (found) {
+        found.qty += q;
+        found.amount = round(found.qty * found.unit);
+      } else {
+        cart.push({ key, category, detail, qty: q, unit, amount: round(unit * q) });
+      }
+      qtyEl.value = 1;
+      renderPreview();
+      renderTicket();
+    }
+
+    function nextReceipt(date) {
+      const tag = date.slice(5).replace(/-/g, "");
+      const prefix = "MP-" + tag + "-";
+      let max = 0;
+      sales.forEach((s) => {
+        if (s.receipt.indexOf(prefix) === 0) {
+          const n = parseInt(s.receipt.slice(prefix.length), 10);
+          if (n > max) max = n;
+        }
+      });
+      return prefix + String(max + 1).padStart(2, "0");
+    }
+
+    function saleToRows(sale) {
+      return sale.items.map((item) => [
+        sale.date, sale.time, sale.receipt, sale.customer || "Walk-in",
+        item.category, item.detail, item.qty, item.unit, item.amount, sale.note || ""
+      ]);
+    }
+
+    async function pushToSheet(sale) {
+      const body = JSON.stringify({ rows: saleToRows(sale) });
+      try {
+        const res = await fetch("/api/sale", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.ok) return true;
+        }
+      } catch (e) {}
+      try {
+        await fetch(SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body
+        });
+        return true;
+      } catch (e) {
+        return false;
+      }
+    }
+
+    async function saveSale() {
+      if (!cart.length) return;
+      const stamp = manilaParts();
+      const sale = {
+        receipt: nextReceipt(stamp.date),
+        date: stamp.date,
+        time: stamp.time,
+        customer: customerEl.value.trim(),
+        note: noteEl.value.trim(),
+        items: cart.map((item) => ({ category: item.category, detail: item.detail, qty: item.qty, unit: item.unit, amount: item.amount })),
+        total: round(cart.reduce((sum, item) => sum + item.amount, 0)),
+        onSheet: false
+      };
+      sales.unshift(sale);
+      saveSales();
+      cart = [];
+      customerEl.value = "";
+      noteEl.value = "";
+      qtyEl.value = 1;
+      renderTicket();
+      renderToday();
+      let sent = false;
+      try { sent = await pushToSheet(sale); } catch (e) { sent = false; }
+      if (sent) {
+        sale.onSheet = true;
+        saveSales();
+        showToast("Saved " + sale.receipt + " · " + peso(sale.total) + " on the sheet");
+      } else {
+        showToast("Saved " + sale.receipt + " on this computer. The sheet did not update.");
+      }
+    }
+
+    async function copyPending() {
+      const pending = sales.filter((s) => !s.onSheet).slice().reverse();
+      if (!pending.length) return;
+      const lines = [];
+      if (!localStorage.getItem(HEADER_KEY)) lines.push(HEADERS.join("\t"));
+      pending.forEach((sale) => {
+        saleToRows(sale).forEach((row) => lines.push(row.map(cell).join("\t")));
+      });
+      const text = lines.join("\n");
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch (e) {
+        const area = document.createElement("textarea");
+        area.value = text;
+        document.body.appendChild(area);
+        area.select();
+        document.execCommand("copy");
+        area.remove();
+      }
+      const marked = pending.map((s) => s.receipt);
+      pending.forEach((s) => { s.onSheet = true; });
+      localStorage.setItem(HEADER_KEY, "1");
+      saveSales();
+      renderRecords();
+      window.open(SHEET_URL, "_blank");
+      showToast("Copied. Click the next empty row and paste.", () => {
+        sales.forEach((s) => { if (marked.indexOf(s.receipt) !== -1) s.onSheet = false; });
+        if (sales.every((s) => !s.onSheet)) localStorage.removeItem(HEADER_KEY);
+        saveSales();
+        renderRecords();
+        showToast("Those sales are waiting to copy again.");
+      });
+    }
+
+    choicesEl.addEventListener("click", (e) => {
+      const btn = e.target.closest("[data-group]");
+      if (!btn) return;
+      const group = btn.dataset.group;
+      const value = btn.dataset.value;
+      if (group === "category") {
+        state.category = value;
+        state.size = null;
+        state.type = null;
+        state.color = null;
+        state.bill = null;
+        state.amount = "";
+        state.fee = "";
+      } else if (group === "size") {
+        state.size = value;
+        state.type = null;
+        state.color = null;
+      } else if (group === "type") {
+        state.type = value;
+        state.color = null;
+      } else if (group === "color") {
+        state.color = value;
+      } else if (group === "lam") {
+        state.type = value;
+      } else if (group === "bill") {
+        state.bill = value;
+      }
+      renderChoices();
+      renderPreview();
+    });
+    choicesEl.addEventListener("input", (e) => {
+      if (e.target.id === "payAmount") {
+        const cat = CATALOG[state.category];
+        const before = needsTypedFee(cat);
+        state.amount = e.target.value;
+        if (needsTypedFee(cat) !== before) {
+          renderChoices();
+          const next = document.getElementById(needsTypedFee(cat) ? "payFee" : "payAmount");
+          if (next) {
+            next.focus();
+            next.setSelectionRange(next.value.length, next.value.length);
+          }
+        }
+      }
+      if (e.target.id === "payFee") state.fee = e.target.value;
+      renderPreview();
+    });
+    choicesEl.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && (e.target.id === "payAmount" || e.target.id === "payFee")) {
+        e.preventDefault();
+        addItem();
+      }
+    });
+
+    document.getElementById("qtyMinus").onclick = () => { qtyEl.value = Math.max(1, qty() - 1); renderPreview(); };
+    document.getElementById("qtyPlus").onclick = () => { qtyEl.value = Math.min(9999, qty() + 1); renderPreview(); };
+    qtyEl.addEventListener("input", renderPreview);
+    qtyEl.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); addItem(); } });
+    addBtn.onclick = addItem;
+    saveBtn.onclick = saveSale;
+
+    linesEl.addEventListener("click", (e) => {
+      const btn = e.target.closest("button");
+      if (!btn || !btn.dataset.act) return;
+      const row = btn.closest("[data-i]");
+      const i = Number(row.dataset.i);
+      if (btn.dataset.act === "inc") cart[i].qty += 1;
+      if (btn.dataset.act === "dec") cart[i].qty = Math.max(1, cart[i].qty - 1);
+      if (btn.dataset.act === "del") cart.splice(i, 1);
+      else cart[i].amount = round(cart[i].qty * cart[i].unit);
+      renderTicket();
+    });
+    linesEl.addEventListener("change", (e) => {
+      if (!e.target.classList.contains("lineqty")) return;
+      const i = Number(e.target.closest("[data-i]").dataset.i);
+      let q = parseInt(e.target.value, 10);
+      if (!q || q < 1) q = 1;
+      if (q > 9999) q = 9999;
+      cart[i].qty = q;
+      cart[i].amount = round(q * cart[i].unit);
+      renderTicket();
+    });
+
+    function showView(name) {
+      document.getElementById("viewSale").hidden = name !== "sale";
+      document.getElementById("viewRecords").hidden = name !== "records";
+      document.getElementById("tabSale").classList.toggle("on", name === "sale");
+      document.getElementById("tabRecords").classList.toggle("on", name === "records");
+      if (name === "records") renderRecords();
+    }
+    document.getElementById("tabSale").onclick = () => showView("sale");
+    document.getElementById("tabRecords").onclick = () => showView("records");
+    document.getElementById("filterToday").onclick = () => {
+      filter = "today";
+      document.getElementById("filterToday").classList.add("on");
+      document.getElementById("filterAll").classList.remove("on");
+      renderRecords();
+    };
+    document.getElementById("filterAll").onclick = () => {
+      filter = "all";
+      document.getElementById("filterAll").classList.add("on");
+      document.getElementById("filterToday").classList.remove("on");
+      renderRecords();
+    };
+    copyBtn.onclick = () => {
+      if (sales.some((s) => !s.onSheet)) copyPending();
+      else window.open(SHEET_URL, "_blank");
+    };
+    recordList.addEventListener("click", (e) => {
+      const btn = e.target.closest(".remove");
+      if (!btn) return;
+      const receipt = btn.dataset.receipt;
+      if (!confirm("Remove " + receipt + " from this computer?")) return;
+      sales = sales.filter((s) => s.receipt !== receipt);
+      saveSales();
+      renderRecords();
+      renderToday();
+    });
+
+    function showApp(on) {
+      document.getElementById("viewLogin").hidden = on;
+      document.getElementById("app").hidden = !on;
+      document.getElementById("headSide").hidden = !on;
+      if (on) showView("sale");
+      else document.getElementById("loginPassword").focus();
+    }
+    document.getElementById("loginForm").onsubmit = (e) => {
+      e.preventDefault();
+      const input = document.getElementById("loginPassword");
+      const error = document.getElementById("loginError");
+      if (input.value === LOGIN_PASSWORD) {
+        localStorage.setItem(AUTH_KEY, "1");
+        input.value = "";
+        error.hidden = true;
+        showApp(true);
+      } else {
+        error.hidden = false;
+        input.select();
+      }
+    };
+    document.getElementById("logoutBtn").onclick = () => {
+      localStorage.removeItem(AUTH_KEY);
+      showApp(false);
+    };
+
+    renderChoices();
+    renderPreview();
+    renderTicket();
+    renderToday();
+    showApp(localStorage.getItem(AUTH_KEY) === "1");
+  </script>
+</body>
+</html>
