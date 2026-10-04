@@ -49,6 +49,7 @@
     .wrap { max-width: 1080px; margin: 0 auto; padding: 18px 18px 48px; }
     nav {
       display: flex;
+      flex-wrap: wrap;
       gap: 8px;
       margin-bottom: 16px;
     }
@@ -338,7 +339,7 @@
     }
     .totalrow strong { font-size: 28px; letter-spacing: -0.03em; color: var(--navy); }
     #saveBtn { width: 100%; background: var(--navy); }
-    .filters { display: flex; gap: 8px; margin-bottom: 12px; }
+    .filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
     .filters button, .textbtn {
       border: 0;
       background: transparent;
@@ -414,8 +415,95 @@
       color: #9ad4ff;
       font-weight: 700;
     }
+    .dashstatus {
+      color: var(--muted);
+      font-size: 13px;
+      margin: -4px 0 12px;
+    }
+    .dashhelp a { color: var(--blue-deep); font-weight: 700; }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .stat {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 14px 16px;
+      min-width: 0;
+    }
+    .stat span {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .stat strong {
+      display: block;
+      margin-top: 4px;
+      color: var(--navy);
+      font-size: 26px;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+    }
+    .stat strong.small { font-size: 18px; line-height: 1.25; }
+    .stat em {
+      display: block;
+      min-height: 1.2em;
+      margin-top: 2px;
+      font-style: normal;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .dashgrid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .subh {
+      margin: 16px 0 8px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .barrow {
+      display: grid;
+      grid-template-columns: minmax(88px, 132px) minmax(0, 1fr) auto;
+      gap: 8px;
+      align-items: center;
+      margin: 7px 0;
+    }
+    .barrow span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: var(--ink);
+      font-weight: 600;
+      font-size: 14px;
+    }
+    .barrow b { color: var(--navy); font-size: 13px; white-space: nowrap; }
+    .bar {
+      height: 10px;
+      background: #e8eef6;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .bar i {
+      display: block;
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #00a6f5, #006ed6);
+    }
     @media (max-width: 860px) {
       .layout { grid-template-columns: 1fr; }
+      .stats { grid-template-columns: 1fr 1fr; }
+      .dashgrid { grid-template-columns: 1fr; }
       .choices.cols-4 { grid-template-columns: 1fr 1fr; }
       header { padding: 12px; }
       .brand img { height: 64px; }
@@ -433,7 +521,10 @@
       #logoutBtn { padding: 8px 12px; }
       .wrap { padding: 12px 12px 28px; }
       .login { max-width: none; margin-top: 12px; }
-      nav button { flex: 1; text-align: center; padding: 10px 12px; }
+      nav button { flex: 1; text-align: center; padding: 10px 8px; font-size: 15px; }
+      .stats { grid-template-columns: 1fr 1fr; }
+      .stat { padding: 12px; }
+      .stat strong { font-size: 22px; }
       .card { padding: 12px; }
       .who { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
       .who .field { margin-bottom: 8px; }
@@ -496,6 +587,7 @@
     <div id="app" hidden>
     <nav>
       <button type="button" id="tabSale" class="on">New sale</button>
+      <button type="button" id="tabDash">Dashboard</button>
       <button type="button" id="tabRecords">Records</button>
     </nav>
 
@@ -535,6 +627,44 @@
         <button type="button" class="sheetbtn" id="copyBtn">Open sheet</button>
       </div>
       <div id="recordList"></div>
+    </section>
+
+    <section id="viewDash" class="records" hidden>
+      <div class="toolbar">
+        <div class="filters" id="dashFilters">
+          <button type="button" data-range="today" class="on">Today</button>
+          <button type="button" data-range="7">7 days</button>
+          <button type="button" data-range="month">This month</button>
+          <button type="button" data-range="all">All</button>
+        </div>
+        <button type="button" class="sheetbtn" id="dashRefresh">Refresh</button>
+      </div>
+      <p id="dashStatus" class="dashstatus" hidden></p>
+      <div id="dashHelp" class="empty dashhelp" hidden>
+        These totals are only from this computer until the sales sheet is connected.
+        <a href="https://docs.google.com/spreadsheets/d/1l9F3zFA8RUkAEqMfd8m1ufhGhkn8zRCT5Y85wGHDYDI/edit?gid=290841672#gid=290841672" target="_blank" rel="noopener">Open the sales sheet</a>,
+        click Share, and set General access to <b>Anyone with the link</b> as Viewer.
+        To keep the sheet private instead, paste <b>sheet/Code.gs</b> into Apps Script and deploy a new version.
+        Then press Refresh.
+      </div>
+      <div class="stats" id="dashStats"></div>
+      <div id="dashEmpty" class="empty" hidden>No sales in this period.</div>
+      <div id="dashBody">
+        <div class="dashgrid">
+          <div class="card">
+            <h2 id="dashTrendTitle">By day</h2>
+            <div id="dashTrend"></div>
+          </div>
+          <div class="card">
+            <h2>By service</h2>
+            <div id="dashCats"></div>
+          </div>
+        </div>
+        <div class="card">
+          <h2>Recent sales</h2>
+          <div id="dashRecent"></div>
+        </div>
+      </div>
     </section>
     </div>
   </div>
@@ -599,6 +729,8 @@
 
     const HEADERS = ["Date", "Time", "Receipt", "Customer", "Category", "Service", "Qty", "Unit Price", "Amount", "Note"];
     const SHEET_URL = "https://docs.google.com/spreadsheets/d/1l9F3zFA8RUkAEqMfd8m1ufhGhkn8zRCT5Y85wGHDYDI/edit?gid=290841672#gid=290841672";
+    const SHEET_ID = "1l9F3zFA8RUkAEqMfd8m1ufhGhkn8zRCT5Y85wGHDYDI";
+    const SHEET_GID = "290841672";
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyWtZLE8DsQqPj1pAgsdQL2XOrLUzxGUMqC5d66iIREBQcjook0Xgx_XRI7zNQXN08vnw/exec";
     const LOGIN_PASSWORD = "mprint";
     const AUTH_KEY = "mprint.auth";
@@ -623,7 +755,14 @@
     let cart = [];
     let sales = loadSales();
     let filter = "today";
+    let dashRange = "today";
+    let remoteLines = null;
+    let remoteState = "off";
+    let remoteAt = 0;
+    let dashLoading = false;
+    let loadGen = 0;
     let toastTimer = 0;
+    const DASH_CACHE = "mprint.sheetCache";
 
     function loadSales() {
       try { return JSON.parse(localStorage.getItem(SALES_KEY)) || []; }
@@ -1080,15 +1219,482 @@
       renderTicket();
     });
 
+    const HEADER_ALIASES = {
+      date: "date", time: "time", receipt: "receipt", customer: "customer",
+      category: "category", service: "service", qty: "qty", "unit price": "unit",
+      unit: "unit", price: "unit", amount: "amount", note: "note"
+    };
+    const HEADER_KEYS = ["date", "time", "receipt", "customer", "category", "service", "qty", "unit", "amount", "note"];
+    const CAT_COLOR = {
+      "Xerox / Copy": "#0094ea",
+      Printing: "#0e7490",
+      Scan: "#ca8a04",
+      Lamination: "#7c3aed",
+      "Cash In": "#db2777",
+      "Cash Out": "#dc2626",
+      "Buy Load": "#16a34a",
+      "Pay Bills": "#a16207",
+      "Bank Transfer": "#ea580c"
+    };
+
+    function parseLooseDate(v) {
+      if (v instanceof Date && !isNaN(v.getTime())) {
+        return v.getFullYear() + "-" + String(v.getMonth() + 1).padStart(2, "0") + "-" + String(v.getDate()).padStart(2, "0");
+      }
+      const s = String(v == null ? "" : v).trim();
+      if (!s) return "";
+      let m = /^(\d{4})-(\d{1,2})-(\d{1,2})/.exec(s);
+      if (m) return m[1] + "-" + String(m[2]).padStart(2, "0") + "-" + String(m[3]).padStart(2, "0");
+      m = /^Date\((\d+),(\d+),(\d+)/.exec(s);
+      if (m) return m[1] + "-" + String(Number(m[2]) + 1).padStart(2, "0") + "-" + String(m[3]).padStart(2, "0");
+      m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})/.exec(s);
+      if (m) {
+        let month = Number(m[1]);
+        let day = Number(m[2]);
+        if (month > 12 && day <= 12) { const swap = month; month = day; day = swap; }
+        if (month < 1 || month > 12 || day < 1 || day > 31) return "";
+        return m[3] + "-" + String(month).padStart(2, "0") + "-" + String(day).padStart(2, "0");
+      }
+      return "";
+    }
+    function normalizeTime(v) {
+      if (v instanceof Date && !isNaN(v.getTime())) {
+        return String(v.getHours()).padStart(2, "0") + ":" + String(v.getMinutes()).padStart(2, "0");
+      }
+      const s = String(v == null ? "" : v).trim();
+      const ampm = /^(\d{1,2}):(\d{2})\s*(AM|PM)\b/i.exec(s);
+      if (ampm) {
+        let h = Number(ampm[1]) % 12;
+        if (/pm/i.test(ampm[3])) h += 12;
+        return String(h).padStart(2, "0") + ":" + ampm[2];
+      }
+      const hm = /^(\d{1,2}):(\d{2})/.exec(s);
+      if (!hm) return "";
+      return String(Number(hm[1])).padStart(2, "0") + ":" + hm[2];
+    }
+    function datePartsTime(raw) {
+      const m = /^Date\(\d+,\d+,\d+,(\d+),(\d+)/.exec(String(raw || ""));
+      if (!m) return "";
+      return String(Number(m[1])).padStart(2, "0") + ":" + String(Number(m[2])).padStart(2, "0");
+    }
+    function addDays(iso, n) {
+      const [y, m, d] = iso.split("-").map(Number);
+      return new Date(Date.UTC(y, m - 1, d + n)).toISOString().slice(0, 10);
+    }
+    function dashDate(iso) {
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(iso || "")) return iso || "";
+      const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      const [y, m, d] = iso.split("-").map(Number);
+      const wd = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][new Date(Date.UTC(y, m - 1, d)).getUTCDay()];
+      return wd + " " + months[m - 1] + " " + d;
+    }
+    function prettyMonth(key) {
+      const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      const [y, m] = key.split("-");
+      return months[Number(m) - 1] + " " + y;
+    }
+    function hourName(h) {
+      const hr = h % 12 || 12;
+      return hr + (h < 12 ? " AM" : " PM");
+    }
+    function timeSortKey(time) {
+      const t = normalizeTime(time);
+      if (!t) return -1;
+      const [h, m] = t.split(":").map(Number);
+      return h * 60 + m;
+    }
+    function hourOf(time) {
+      const key = timeSortKey(time);
+      return key < 0 ? null : Math.floor(key / 60);
+    }
+    function safePrettyTime(time) {
+      const t = normalizeTime(time);
+      return t ? prettyTime(t) : "";
+    }
+    function lineAmount(v) {
+      const n = typeof v === "number" ? v : moneyNumber(v);
+      return Number.isFinite(n) ? n : 0;
+    }
+    function repairShifted(raw) {
+      const date = parseLooseDate(raw.date);
+      const time = datePartsTime(raw.time) || normalizeTime(raw.time);
+      if (date || time) return raw;
+      const names = {};
+      Object.keys(CATALOG).forEach((id) => { names[CATALOG[id].label] = true; });
+      if (!names[String(raw.customer || "")]) return raw;
+      return {
+        date: "",
+        time: "",
+        receipt: "",
+        customer: raw.receipt,
+        category: raw.customer,
+        service: raw.category,
+        qty: raw.service,
+        unit: raw.qty,
+        amount: raw.unit !== "" && raw.unit != null ? raw.unit : raw.amount,
+        note: raw.note || ""
+      };
+    }
+    function normalizeLine(raw) {
+      if (!raw || typeof raw !== "object") return null;
+      const fixed = repairShifted(raw);
+      const date = parseLooseDate(fixed.date);
+      const category = String(fixed.category || "");
+      if (!date && !category) return null;
+      return {
+        date,
+        time: datePartsTime(fixed.time) || normalizeTime(fixed.time),
+        receipt: String(fixed.receipt || ""),
+        customer: String(fixed.customer || ""),
+        category,
+        service: String(fixed.service || ""),
+        qty: lineAmount(fixed.qty),
+        unit: lineAmount(fixed.unit),
+        amount: lineAmount(fixed.amount),
+        note: String(fixed.note || "")
+      };
+    }
+    function saleTotal(sale) {
+      if (sale.total != null && sale.total !== "") return round(Number(sale.total) || 0);
+      return round((sale.items || []).reduce((sum, item) => sum + (Number(item.amount) || 0), 0));
+    }
+    function groupLines(lines) {
+      const order = [];
+      const map = {};
+      lines.forEach((line) => {
+        if (!line || (!line.date && !line.category)) return;
+        const key = [line.receipt, line.date, line.time, line.customer].join("|");
+        if (!map[key]) {
+          map[key] = {
+            receipt: line.receipt || "—",
+            date: line.date,
+            time: line.time || "",
+            customer: line.customer || "",
+            note: line.note || "",
+            items: [],
+            total: 0
+          };
+          order.push(map[key]);
+        }
+        const sale = map[key];
+        const amount = round(Number(line.amount) || 0);
+        sale.items.push({
+          category: line.category,
+          detail: line.service,
+          qty: Number(line.qty) || 0,
+          unit: Number(line.unit) || 0,
+          amount
+        });
+        sale.total = round(sale.total + amount);
+        if (line.note && !sale.note) sale.note = line.note;
+      });
+      return order;
+    }
+    function receiptsForDash() {
+      const remote = remoteLines ? groupLines(remoteLines) : [];
+      const seen = {};
+      remote.forEach((sale) => { if (sale.receipt) seen[sale.receipt] = true; });
+      const extras = remoteLines ? sales.filter((sale) => !seen[sale.receipt]) : sales;
+      return remote.concat(extras).sort((a, b) => {
+        if (a.date !== b.date) return a.date < b.date ? 1 : -1;
+        return timeSortKey(b.time) - timeSortKey(a.time);
+      });
+    }
+    function rangeBounds(range, today) {
+      if (range === "all") return { start: "", end: "", prev: null, prevLabel: "" };
+      if (range === "today") {
+        const y = addDays(today, -1);
+        return { start: today, end: today, prev: { start: y, end: y }, prevLabel: "Yesterday" };
+      }
+      if (range === "7") {
+        return {
+          start: addDays(today, -6),
+          end: today,
+          prev: { start: addDays(today, -13), end: addDays(today, -7) },
+          prevLabel: "Previous 7 days"
+        };
+      }
+      const start = today.slice(0, 7) + "-01";
+      const prevEnd = addDays(start, -1);
+      return {
+        start,
+        end: today,
+        prev: { start: prevEnd.slice(0, 7) + "-01", end: prevEnd },
+        prevLabel: "Last month"
+      };
+    }
+    function inSpan(date, span) {
+      if (!span) return false;
+      if (!span.start && !span.end) return true;
+      if (!date) return false;
+      if (span.start && date < span.start) return false;
+      if (span.end && date > span.end) return false;
+      return true;
+    }
+    function topEntries(map) {
+      return Object.keys(map).map((label) => ({ label, value: map[label] }))
+        .filter((entry) => entry.value)
+        .sort((a, b) => b.value - a.value);
+    }
+    function statCard(label, value, sub) {
+      const small = String(value).length > 16 ? " small" : "";
+      return '<div class="stat"><span>' + esc(label) + "</span><strong class=\"" + small.trim() + "\">" + esc(value) + "</strong><em>" + esc(sub || "") + "</em></div>";
+    }
+    function barRows(pairs, colorFor) {
+      const max = pairs.reduce((peak, pair) => Math.max(peak, pair.value), 0) || 1;
+      if (!pairs.length) return '<div class="empty">Nothing to chart in this period.</div>';
+      return pairs.map((pair) => {
+        const width = pair.value <= 0 ? 0 : Math.max(3, Math.round((pair.value / max) * 100));
+        const color = colorFor ? colorFor(pair.label) : "";
+        const style = ' style="width:' + width + "%" + (color ? ";background:" + color : "") + '"';
+        return '<div class="barrow"><span title="' + esc(pair.label) + '">' + esc(pair.label) + '</span><div class="bar"><i' + style + "></i></div><b>" + peso(pair.value) + "</b></div>";
+      }).join("");
+    }
+    function buildTrend(filtered, bounds) {
+      if (dashRange === "today") {
+        const hours = {};
+        filtered.forEach((sale) => {
+          const hour = hourOf(sale.time);
+          if (hour == null) return;
+          hours[hour] = round((hours[hour] || 0) + saleTotal(sale));
+        });
+        const keys = Object.keys(hours).map(Number).sort((a, b) => a - b);
+        if (!keys.length && filtered.length) {
+          return { title: "Today", pairs: [{ label: dashDate(bounds.start), value: round(filtered.reduce((sum, sale) => sum + saleTotal(sale), 0)) }] };
+        }
+        return { title: "By hour", pairs: keys.map((hour) => ({ label: hourName(hour), value: hours[hour] })) };
+      }
+      const days = {};
+      let undated = 0;
+      filtered.forEach((sale) => {
+        if (!sale.date) {
+          undated = round(undated + saleTotal(sale));
+          return;
+        }
+        days[sale.date] = round((days[sale.date] || 0) + saleTotal(sale));
+      });
+      const dates = Object.keys(days).sort();
+      if (dashRange !== "7" && dates.length > 31) {
+        const months = {};
+        dates.forEach((date) => {
+          const key = date.slice(0, 7);
+          months[key] = round((months[key] || 0) + days[date]);
+        });
+        const pairs = Object.keys(months).sort().map((key) => ({ label: prettyMonth(key), value: months[key] }));
+        if (undated) pairs.push({ label: "No date", value: undated });
+        return { title: "By month", pairs };
+      }
+      if (dashRange === "7" && bounds.start) {
+        const pairs = [];
+        for (let i = 0; i < 7; i++) {
+          const date = addDays(bounds.start, i);
+          pairs.push({ label: dashDate(date), value: days[date] || 0 });
+        }
+        return { title: "By day", pairs };
+      }
+      const pairs = dates.map((date) => ({ label: dashDate(date), value: days[date] }));
+      if (undated) pairs.push({ label: "No date", value: undated });
+      return { title: "By day", pairs };
+    }
+    function renderDashboard() {
+      const today = manilaParts().date;
+      const bounds = rangeBounds(dashRange, today);
+      const all = receiptsForDash();
+      const filtered = all.filter((sale) => inSpan(sale.date, bounds));
+      const total = round(filtered.reduce((sum, sale) => sum + saleTotal(sale), 0));
+      const count = filtered.length;
+      const avg = count ? round(total / count) : 0;
+      const prevList = bounds.prev ? all.filter((sale) => inSpan(sale.date, bounds.prev)) : [];
+      const prevTotal = round(prevList.reduce((sum, sale) => sum + saleTotal(sale), 0));
+      const cats = {};
+      const services = {};
+      const customers = {};
+      filtered.forEach((sale) => {
+        (sale.items || []).forEach((item) => {
+          const cat = item.category || "Other";
+          const svc = item.detail || cat;
+          cats[cat] = round((cats[cat] || 0) + (Number(item.amount) || 0));
+          services[svc] = round((services[svc] || 0) + (Number(item.amount) || 0));
+        });
+        const who = String(sale.customer || "").trim();
+        if (who && !/^walk-?in$/i.test(who)) customers[who] = round((customers[who] || 0) + saleTotal(sale));
+      });
+      const topCat = topEntries(cats)[0];
+      const trend = buildTrend(filtered, bounds);
+      const busiest = trend.pairs.slice().sort((a, b) => b.value - a.value)[0];
+      const cmp = bounds.prevLabel ? bounds.prevLabel + " " + peso(prevTotal) : "";
+      const spotlight = dashRange === "today" ? (trend.title === "By hour" ? "Busiest hour" : "Today") : "Busiest day";
+      document.getElementById("dashStats").innerHTML =
+        statCard("Sales", peso(total), cmp) +
+        statCard("Receipts", String(count), count ? "Avg " + peso(avg) : "No receipts") +
+        statCard("Top service", topCat ? topCat.label : "—", topCat ? peso(topCat.value) : "") +
+        statCard(spotlight, busiest && busiest.value ? busiest.label : "—", busiest && busiest.value ? peso(busiest.value) : "");
+      const status = document.getElementById("dashStatus");
+      let statusText = "";
+      if (dashLoading) statusText = "Updating the sales sheet…";
+      else if (remoteState === "live") statusText = "Connected to the sales sheet · updated " + prettyTime(manilaParts().time);
+      else if (remoteState === "cache") statusText = "Showing the last saved copy of the sales sheet.";
+      else if (remoteState === "stale") statusText = "Couldn't reach the sales sheet. Showing the last saved copy.";
+      let extraCount = 0;
+      if (remoteLines) {
+        const seen = {};
+        groupLines(remoteLines).forEach((row) => { if (row.receipt && row.receipt !== "—") seen[row.receipt] = true; });
+        extraCount = sales.filter((sale) => sale.receipt && !seen[sale.receipt]).length;
+      }
+      if (extraCount && !dashLoading) {
+        statusText += (statusText ? " " : "") + "Includes " + extraCount + (extraCount === 1 ? " sale" : " sales") + " on this computer that " + (extraCount === 1 ? "is" : "are") + " not on the sheet yet.";
+      }
+      status.hidden = !statusText;
+      status.textContent = statusText;
+      document.getElementById("dashHelp").hidden = Array.isArray(remoteLines);
+      const body = document.getElementById("dashBody");
+      const empty = document.getElementById("dashEmpty");
+      if (!filtered.length) {
+        body.hidden = true;
+        empty.hidden = false;
+        return;
+      }
+      body.hidden = false;
+      empty.hidden = true;
+      document.getElementById("dashTrendTitle").textContent = trend.title;
+      document.getElementById("dashTrend").innerHTML = barRows(trend.pairs);
+      const catEntries = topEntries(cats);
+      const svcEntries = topEntries(services).slice(0, 6);
+      const customerEntries = topEntries(customers).slice(0, 5);
+      let catsHtml = barRows(catEntries, (label) => CAT_COLOR[label] || "");
+      if (svcEntries.length) catsHtml += '<p class="subh">Top details</p>' + barRows(svcEntries);
+      if (customerEntries.length) catsHtml += '<p class="subh">Customers</p>' + barRows(customerEntries);
+      document.getElementById("dashCats").innerHTML = catsHtml;
+      document.getElementById("dashRecent").innerHTML = filtered.slice(0, 12).map((sale) => {
+        const bits = [dashDate(sale.date), safePrettyTime(sale.time), sale.customer || "Walk-in"];
+        if (sale.note) bits.push(sale.note);
+        return '<article class="sale"><div class="top"><div><b>' + esc(sale.receipt) + '</b><div class="meta">' +
+          esc(bits.filter(Boolean).join(" · ")) +
+          '</div></div><b>' + peso(saleTotal(sale)) + "</b></div><ul>" +
+          (sale.items || []).map((item) => (
+            '<li><span><b class="' + serviceClass(item.category) + '">' + esc(item.category) + "</b> · " + esc(item.detail || "") + "</span><span>" +
+            item.qty + " × " + peso(item.unit) + "</span></li>"
+          )).join("") + "</ul></article>";
+      }).join("");
+    }
+    function loadDashCache() {
+      try {
+        const cached = JSON.parse(localStorage.getItem(DASH_CACHE) || "null");
+        if (cached && Array.isArray(cached.rows)) {
+          remoteLines = cached.rows.map(normalizeLine).filter(Boolean);
+          remoteState = "cache";
+        }
+      } catch (e) {}
+    }
+    function applyRemote(rows) {
+      remoteLines = rows;
+      remoteState = "live";
+      remoteAt = Date.now();
+      try { localStorage.setItem(DASH_CACHE, JSON.stringify({ rows })); } catch (e) {}
+      renderDashboard();
+      renderToday();
+    }
+    function loadJsonp(src, pick, ms) {
+      return new Promise((resolve, reject) => {
+        const cb = "mprint_" + Math.random().toString(36).slice(2);
+        const script = document.createElement("script");
+        let settled = false;
+        const done = (err, value) => {
+          if (settled) return;
+          settled = true;
+          clearTimeout(timer);
+          window[cb] = undefined;
+          script.remove();
+          if (err) reject(err);
+          else resolve(value);
+        };
+        window[cb] = (payload) => {
+          try { done(null, pick(payload)); }
+          catch (err) { done(err); }
+        };
+        const timer = setTimeout(() => done(new Error("timeout")), ms);
+        script.onerror = () => done(new Error("load"));
+        script.src = src.replace("__CB__", cb);
+        document.head.appendChild(script);
+      });
+    }
+    function pickScriptRows(payload) {
+      if (!payload || payload.ok !== true || !Array.isArray(payload.rows)) throw new Error("shape");
+      return payload.rows.map(normalizeLine).filter(Boolean);
+    }
+    function pickGvizRows(payload) {
+      if (!payload || payload.status !== "ok" || !payload.table) throw new Error("gviz");
+      const cols = payload.table.cols || [];
+      const keys = cols.map((col, i) => HEADER_ALIASES[String(col.label || "").trim().toLowerCase()] || HEADER_KEYS[i] || "");
+      const rows = [];
+      (payload.table.rows || []).forEach((row) => {
+        const cells = row.c || [];
+        const raw = {};
+        keys.forEach((key, i) => {
+          if (!key) return;
+          const cell = cells[i];
+          if (!cell || cell.v == null || cell.v === "") raw[key] = "";
+          else if (key === "time") raw[key] = datePartsTime(cell.v) || cell.v;
+          else raw[key] = cell.v;
+        });
+        const line = normalizeLine(raw);
+        if (line) rows.push(line);
+      });
+      return rows;
+    }
+    async function loadRemoteSales(force) {
+      if (localStorage.getItem(AUTH_KEY) !== "1") return;
+      if (!force && dashLoading) return;
+      if (!force && remoteState === "live" && Date.now() - remoteAt < 30000) return;
+      const gen = ++loadGen;
+      dashLoading = true;
+      const btn = document.getElementById("dashRefresh");
+      btn.disabled = true;
+      btn.textContent = "Refreshing…";
+      renderDashboard();
+      const stamp = Date.now();
+      const scriptUrl = SCRIPT_URL + "?action=sales&key=" + encodeURIComponent(LOGIN_PASSWORD) + "&callback=__CB__&t=" + stamp;
+      const gvizUrl = "https://docs.google.com/spreadsheets/d/" + SHEET_ID + "/gviz/tq?tqx=out:json;responseHandler:__CB__&gid=" + SHEET_GID + "&t=" + stamp;
+      const scriptTry = loadJsonp(scriptUrl, pickScriptRows, 15000).catch(() => null);
+      const gvizTry = loadJsonp(gvizUrl, pickGvizRows, 10000).catch(() => null);
+      let rows = await scriptTry;
+      if (gen !== loadGen) return;
+      if (!Array.isArray(rows)) rows = await gvizTry;
+      if (gen !== loadGen) return;
+      dashLoading = false;
+      btn.disabled = false;
+      btn.textContent = "Refresh";
+      if (Array.isArray(rows)) applyRemote(rows);
+      else {
+        remoteState = remoteLines ? "stale" : "off";
+        renderDashboard();
+      }
+    }
+
     function showView(name) {
       document.getElementById("viewSale").hidden = name !== "sale";
       document.getElementById("viewRecords").hidden = name !== "records";
+      document.getElementById("viewDash").hidden = name !== "dash";
       document.getElementById("tabSale").classList.toggle("on", name === "sale");
       document.getElementById("tabRecords").classList.toggle("on", name === "records");
+      document.getElementById("tabDash").classList.toggle("on", name === "dash");
       if (name === "records") renderRecords();
+      if (name === "dash") {
+        renderDashboard();
+        loadRemoteSales(false);
+      }
     }
     document.getElementById("tabSale").onclick = () => showView("sale");
+    document.getElementById("tabDash").onclick = () => showView("dash");
     document.getElementById("tabRecords").onclick = () => showView("records");
+    document.getElementById("dashFilters").onclick = (e) => {
+      const btn = e.target.closest("button");
+      if (!btn || !btn.dataset.range) return;
+      dashRange = btn.dataset.range;
+      document.querySelectorAll("#dashFilters button").forEach((item) => item.classList.toggle("on", item === btn));
+      renderDashboard();
+    };
+    document.getElementById("dashRefresh").onclick = () => loadRemoteSales(true);
     document.getElementById("filterToday").onclick = () => {
       filter = "today";
       document.getElementById("filterToday").classList.add("on");
@@ -1120,8 +1726,10 @@
       document.getElementById("viewLogin").hidden = on;
       document.getElementById("app").hidden = !on;
       document.getElementById("headSide").hidden = !on;
-      if (on) showView("sale");
-      else document.getElementById("loginPassword").focus();
+      if (on) {
+        showView("sale");
+        loadRemoteSales(false);
+      } else document.getElementById("loginPassword").focus();
     }
     document.getElementById("loginForm").onsubmit = (e) => {
       e.preventDefault();
@@ -1142,6 +1750,7 @@
       showApp(false);
     };
 
+    loadDashCache();
     renderChoices();
     renderPreview();
     renderTicket();
