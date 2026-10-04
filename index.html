@@ -58,8 +58,9 @@
       background: #fff;
       color: var(--ink);
       border-radius: 999px;
-      padding: 8px 16px;
-      font-weight: 600;
+      padding: 14px 22px;
+      font-size: 18px;
+      font-weight: 700;
     }
     nav button.on {
       background: var(--navy);
@@ -116,10 +117,10 @@
       border-color: transparent;
       box-shadow: 0 8px 18px rgba(0, 110, 214, 0.22);
     }
-    .choice.svc-xerox { background: #e8f6ff; border-color: #8ecfff; color: #0b5ea8; }
-    .choice.svc-printing { background: #e6faf8; border-color: #7ed8d0; color: #0e7490; }
-    .choice.svc-scan { background: #fde68a; border-color: #eab308; color: #854d0e; }
-    .choice.svc-lamination { background: #f3eefe; border-color: #c9b6f5; color: #5b21b6; }
+    .choice.svc-xerox, #dashServices .svc-xerox { background: #e8f6ff; border-color: #8ecfff; color: #0b5ea8; }
+    .choice.svc-printing, #dashServices .svc-printing { background: #e6faf8; border-color: #7ed8d0; color: #0e7490; }
+    .choice.svc-scan, #dashServices .svc-scan { background: #fde68a; border-color: #eab308; color: #854d0e; }
+    .choice.svc-lamination, #dashServices .svc-lamination { background: #f3eefe; border-color: #c9b6f5; color: #5b21b6; }
     .choice.svc, .choice.wallet {
       display: flex;
       align-items: center;
@@ -134,20 +135,20 @@
       font-size: 18px;
       line-height: 1;
     }
-    .choice.svc-xerox.on { background: linear-gradient(180deg, #00a6f5 0%, #006ed6 100%); color: #fff; }
-    .choice.svc-printing.on { background: linear-gradient(180deg, #0891b2 0%, #155e75 100%); color: #fff; }
-    .choice.svc-scan.on { background: linear-gradient(180deg, #ca8a04 0%, #713f12 100%); color: #fff; }
-    .choice.svc-lamination.on { background: linear-gradient(180deg, #a78bfa 0%, #6d28d9 100%); color: #fff; }
-    .choice.svc-cashin { background: #fbcfe8; border-color: #f472b6; color: #9d174d; }
-    .choice.svc-cashout { background: #fecaca; border-color: #f87171; color: #991b1b; }
-    .choice.svc-load { background: #bbf7d0; border-color: #4ade80; color: #166534; }
-    .choice.svc-bills { background: #e7d5b5; border-color: #c4a574; color: #78350f; }
-    .choice.svc-transfer { background: #ffedd5; border-color: #fdba74; color: #c2410c; }
-    .choice.svc-cashin.on { background: linear-gradient(180deg, #db2777 0%, #9d174d 100%); color: #fff; }
-    .choice.svc-cashout.on { background: linear-gradient(180deg, #dc2626 0%, #991b1b 100%); color: #fff; }
-    .choice.svc-load.on { background: linear-gradient(180deg, #16a34a 0%, #14532d 100%); color: #fff; }
-    .choice.svc-bills.on { background: linear-gradient(180deg, #a16207 0%, #5c3317 100%); color: #fff; }
-    .choice.svc-transfer.on { background: linear-gradient(180deg, #fb923c 0%, #c2410c 100%); color: #fff; }
+    .choice.svc-xerox.on, #dashServices .svc-xerox.on { background: linear-gradient(180deg, #00a6f5 0%, #006ed6 100%); color: #fff; }
+    .choice.svc-printing.on, #dashServices .svc-printing.on { background: linear-gradient(180deg, #0891b2 0%, #155e75 100%); color: #fff; }
+    .choice.svc-scan.on, #dashServices .svc-scan.on { background: linear-gradient(180deg, #ca8a04 0%, #713f12 100%); color: #fff; }
+    .choice.svc-lamination.on, #dashServices .svc-lamination.on { background: linear-gradient(180deg, #a78bfa 0%, #6d28d9 100%); color: #fff; }
+    .choice.svc-cashin, #dashServices .svc-cashin { background: #fbcfe8; border-color: #f472b6; color: #9d174d; }
+    .choice.svc-cashout, #dashServices .svc-cashout { background: #fecaca; border-color: #f87171; color: #991b1b; }
+    .choice.svc-load, #dashServices .svc-load { background: #bbf7d0; border-color: #4ade80; color: #166534; }
+    .choice.svc-bills, #dashServices .svc-bills { background: #e7d5b5; border-color: #c4a574; color: #78350f; }
+    .choice.svc-transfer, #dashServices .svc-transfer { background: #ffedd5; border-color: #fdba74; color: #c2410c; }
+    .choice.svc-cashin.on, #dashServices .svc-cashin.on { background: linear-gradient(180deg, #db2777 0%, #9d174d 100%); color: #fff; }
+    .choice.svc-cashout.on, #dashServices .svc-cashout.on { background: linear-gradient(180deg, #dc2626 0%, #991b1b 100%); color: #fff; }
+    .choice.svc-load.on, #dashServices .svc-load.on { background: linear-gradient(180deg, #16a34a 0%, #14532d 100%); color: #fff; }
+    .choice.svc-bills.on, #dashServices .svc-bills.on { background: linear-gradient(180deg, #a16207 0%, #5c3317 100%); color: #fff; }
+    .choice.svc-transfer.on, #dashServices .svc-transfer.on { background: linear-gradient(180deg, #fb923c 0%, #c2410c 100%); color: #fff; }
     .choice.wallet {
       position: relative;
       justify-content: center;
@@ -355,6 +356,12 @@
       padding: 6px 12px;
     }
     .filters button.on { background: var(--navy); color: #fff; border-color: var(--navy); }
+    #dashServices button {
+      padding: 5px 10px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    #dashServices button.on { border-color: transparent; box-shadow: 0 0 0 2px var(--navy); }
     .sale {
       border: 1px solid var(--line);
       border-radius: 14px;
@@ -458,6 +465,13 @@
       color: var(--muted);
       font-size: 13px;
     }
+    .overall {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .overall .stat strong { font-size: 32px; }
     .dashgrid {
       display: grid;
       grid-template-columns: 1.15fr 0.85fr;
@@ -521,10 +535,11 @@
       #logoutBtn { padding: 8px 12px; }
       .wrap { padding: 12px 12px 28px; }
       .login { max-width: none; margin-top: 12px; }
-      nav button { flex: 1; text-align: center; padding: 10px 8px; font-size: 15px; }
+      nav button { flex: 1; text-align: center; padding: 12px 10px; font-size: 16px; }
       .stats { grid-template-columns: 1fr 1fr; }
       .stat { padding: 12px; }
       .stat strong { font-size: 22px; }
+      .overall .stat strong { font-size: 24px; }
       .card { padding: 12px; }
       .who { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
       .who .field { margin-bottom: 8px; }
@@ -630,6 +645,8 @@
     </section>
 
     <section id="viewDash" class="records" hidden>
+      <div class="filters" id="dashServices"></div>
+      <div class="overall" id="dashOverall"></div>
       <div class="toolbar">
         <div class="filters" id="dashFilters">
           <button type="button" data-range="today" class="on">Today</button>
@@ -656,7 +673,7 @@
             <div id="dashTrend"></div>
           </div>
           <div class="card">
-            <h2>By service</h2>
+            <h2 id="dashCatsTitle">By service</h2>
             <div id="dashCats"></div>
           </div>
         </div>
@@ -682,6 +699,16 @@
       "Text with Picture": [7, 11, 16],
       "Picture Only": [8, 13, 25]
     };
+    const SHORT_KITA = {
+      "Text Only": [3.5, 6.5, 10.5],
+      "Text with Picture": [4.5, 8.5, 13.5],
+      "Picture Only": [5.5, 10.5, 18.5]
+    };
+    const LONG_KITA = {
+      "Text Only": [4, 7, 11],
+      "Text with Picture": [5, 9, 14],
+      "Picture Only": [6, 11, 23]
+    };
     const SCAN = { "Scan Document": 5, "Scan with Multiple Pages": 5 };
     const WALLETS = ["GCash", "Maya", "GoTyme", "MariBank"];
     const WALLET_CLASS = { GCash: "wallet wallet-gcash", Maya: "wallet wallet-maya", GoTyme: "wallet wallet-gotyme", MariBank: "wallet wallet-mari" };
@@ -703,6 +730,8 @@
       });
       return out;
     }
+    const KITA = { Short: paper(SHORT_KITA), Long: paper(LONG_KITA) };
+    KITA.A4 = KITA.Short;
 
     const CATALOG = {
       xerox: { label: "Xerox / Copy", mode: "print", sizes: { Short: paper(SHORT), Long: paper(LONG), A4: paper(SHORT) } },
@@ -756,6 +785,7 @@
     let sales = loadSales();
     let filter = "today";
     let dashRange = "today";
+    let dashService = "all";
     let remoteLines = null;
     let remoteState = "off";
     let remoteAt = 0;
@@ -1354,6 +1384,57 @@
         note: String(fixed.note || "")
       };
     }
+    const MONEY_CATS = { "Cash In": 1, "Cash Out": 1, "Buy Load": 1, "Pay Bills": 1, "Bank Transfer": 1 };
+    function principalOf(item) {
+      const earned = Number(item.amount) || 0;
+      if (!MONEY_CATS[item.category]) return earned;
+      const parts = String(item.detail || "").match(/₱\s*([0-9][0-9,]*(?:\.[0-9]+)?)/g);
+      if (!parts) return earned;
+      const n = moneyNumber(parts[parts.length - 1].replace(/₱/g, ""));
+      return Number.isFinite(n) && n > 0 ? n : earned;
+    }
+    function kitaOf(item) {
+      const earned = Number(item.amount) || 0;
+      if (item.category !== "Xerox / Copy" && item.category !== "Printing") return earned;
+      const parts = String(item.detail || "").split(" · ");
+      const table = KITA[parts[0]];
+      const unit = table && table[parts[1]] && table[parts[1]][parts[2]];
+      const qty = Number(item.qty) || 0;
+      if (unit == null || !(qty > 0)) return earned;
+      return round(unit * qty);
+    }
+    function projectSale(sale, service) {
+      const items = (sale.items || []).filter((item) => service === "all" || item.category === service);
+      if (!items.length) return null;
+      return {
+        receipt: sale.receipt,
+        date: sale.date,
+        time: sale.time,
+        customer: sale.customer,
+        note: sale.note,
+        items,
+        total: round(items.reduce((sum, item) => sum + kitaOf(item), 0)),
+        salesValue: round(items.reduce((sum, item) => sum + principalOf(item), 0))
+      };
+    }
+    function rangeLabel() {
+      if (dashRange === "today") return "Today";
+      if (dashRange === "7") return "Last 7 days";
+      if (dashRange === "month") return "This month";
+      return "All time";
+    }
+    function serviceNote() {
+      return dashService === "all" ? "All services" : dashService;
+    }
+    function renderServiceFilters() {
+      const buttons = [{ id: "all", label: "All services", cls: "" }].concat(
+        Object.keys(CATALOG).map((id) => ({ id: CATALOG[id].label, label: CATALOG[id].label, cls: "svc-" + id }))
+      );
+      document.getElementById("dashServices").innerHTML = buttons.map((btn) => {
+        const cls = [btn.cls, dashService === btn.id ? "on" : ""].filter(Boolean).join(" ");
+        return '<button type="button"' + (cls ? ' class="' + cls + '"' : "") + ' data-service="' + esc(btn.id) + '">' + esc(btn.label) + "</button>";
+      }).join("");
+    }
     function saleTotal(sale) {
       if (sale.total != null && sale.total !== "") return round(Number(sale.total) || 0);
       return round((sale.items || []).reduce((sum, item) => sum + (Number(item.amount) || 0), 0));
@@ -1499,12 +1580,20 @@
     function renderDashboard() {
       const today = manilaParts().date;
       const bounds = rangeBounds(dashRange, today);
-      const all = receiptsForDash();
-      const filtered = all.filter((sale) => inSpan(sale.date, bounds));
-      const total = round(filtered.reduce((sum, sale) => sum + saleTotal(sale), 0));
+      renderServiceFilters();
+      const projected = receiptsForDash().map((sale) => projectSale(sale, dashService)).filter(Boolean);
+      const overallSales = round(projected.reduce((sum, sale) => sum + sale.salesValue, 0));
+      const overallRevenue = round(projected.reduce((sum, sale) => sum + sale.total, 0));
+      const overallCount = projected.length;
+      document.getElementById("dashOverall").innerHTML =
+        statCard("Overall sales", peso(overallSales), overallCount + (overallCount === 1 ? " sale" : " sales") + " · " + serviceNote()) +
+        statCard("Revenue", peso(overallRevenue), "Kita · " + serviceNote());
+      const filtered = projected.filter((sale) => inSpan(sale.date, bounds));
+      const periodSales = round(filtered.reduce((sum, sale) => sum + sale.salesValue, 0));
+      const periodRevenue = round(filtered.reduce((sum, sale) => sum + saleTotal(sale), 0));
       const count = filtered.length;
-      const avg = count ? round(total / count) : 0;
-      const prevList = bounds.prev ? all.filter((sale) => inSpan(sale.date, bounds.prev)) : [];
+      const avg = count ? round(periodRevenue / count) : 0;
+      const prevList = bounds.prev ? projected.filter((sale) => inSpan(sale.date, bounds.prev)) : [];
       const prevTotal = round(prevList.reduce((sum, sale) => sum + saleTotal(sale), 0));
       const cats = {};
       const services = {};
@@ -1513,21 +1602,20 @@
         (sale.items || []).forEach((item) => {
           const cat = item.category || "Other";
           const svc = item.detail || cat;
-          cats[cat] = round((cats[cat] || 0) + (Number(item.amount) || 0));
-          services[svc] = round((services[svc] || 0) + (Number(item.amount) || 0));
+          cats[cat] = round((cats[cat] || 0) + kitaOf(item));
+          services[svc] = round((services[svc] || 0) + kitaOf(item));
         });
         const who = String(sale.customer || "").trim();
         if (who && !/^walk-?in$/i.test(who)) customers[who] = round((customers[who] || 0) + saleTotal(sale));
       });
-      const topCat = topEntries(cats)[0];
       const trend = buildTrend(filtered, bounds);
       const busiest = trend.pairs.slice().sort((a, b) => b.value - a.value)[0];
       const cmp = bounds.prevLabel ? bounds.prevLabel + " " + peso(prevTotal) : "";
       const spotlight = dashRange === "today" ? (trend.title === "By hour" ? "Busiest hour" : "Today") : "Busiest day";
       document.getElementById("dashStats").innerHTML =
-        statCard("Sales", peso(total), cmp) +
+        statCard("Sales", peso(periodSales), rangeLabel()) +
+        statCard("Revenue", peso(periodRevenue), cmp || ("Kita · " + serviceNote())) +
         statCard("Receipts", String(count), count ? "Avg " + peso(avg) : "No receipts") +
-        statCard("Top service", topCat ? topCat.label : "—", topCat ? peso(topCat.value) : "") +
         statCard(spotlight, busiest && busiest.value ? busiest.label : "—", busiest && busiest.value ? peso(busiest.value) : "");
       const status = document.getElementById("dashStatus");
       let statusText = "";
@@ -1552,11 +1640,13 @@
       if (!filtered.length) {
         body.hidden = true;
         empty.hidden = false;
+        empty.textContent = dashService === "all" ? "No sales in this period." : "No " + dashService + " sales in this period.";
         return;
       }
       body.hidden = false;
       empty.hidden = true;
-      document.getElementById("dashTrendTitle").textContent = trend.title;
+      document.getElementById("dashTrendTitle").textContent = trend.title === "Today" ? "Revenue today" : "Revenue " + trend.title.toLowerCase();
+      document.getElementById("dashCatsTitle").textContent = dashService === "all" ? "By service" : dashService;
       document.getElementById("dashTrend").innerHTML = barRows(trend.pairs);
       const catEntries = topEntries(cats);
       const svcEntries = topEntries(services).slice(0, 6);
@@ -1570,7 +1660,7 @@
         if (sale.note) bits.push(sale.note);
         return '<article class="sale"><div class="top"><div><b>' + esc(sale.receipt) + '</b><div class="meta">' +
           esc(bits.filter(Boolean).join(" · ")) +
-          '</div></div><b>' + peso(saleTotal(sale)) + "</b></div><ul>" +
+          '</div></div><b>' + peso(sale.salesValue != null ? sale.salesValue : saleTotal(sale)) + "</b></div><ul>" +
           (sale.items || []).map((item) => (
             '<li><span><b class="' + serviceClass(item.category) + '">' + esc(item.category) + "</b> · " + esc(item.detail || "") + "</span><span>" +
             item.qty + " × " + peso(item.unit) + "</span></li>"
@@ -1695,6 +1785,12 @@
       renderDashboard();
     };
     document.getElementById("dashRefresh").onclick = () => loadRemoteSales(true);
+    document.getElementById("dashServices").onclick = (e) => {
+      const btn = e.target.closest("button");
+      if (!btn || !btn.dataset.service) return;
+      dashService = btn.dataset.service;
+      renderDashboard();
+    };
     document.getElementById("filterToday").onclick = () => {
       filter = "today";
       document.getElementById("filterToday").classList.add("on");
